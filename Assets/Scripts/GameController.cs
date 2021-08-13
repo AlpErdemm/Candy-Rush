@@ -8,6 +8,9 @@ public class GameController : MonoBehaviour
     private GameObject Character;
 
     [SerializeField]
+    private GameObject PaintingWall;
+
+    [SerializeField]
     private List<GameObject> StartElements;
 
     [SerializeField]
@@ -30,8 +33,8 @@ public class GameController : MonoBehaviour
 
     }
 
-    public void setGameOver()
+    public void enablePainting()
     {
-        Debug.Log("Game Over Bitch!");
+        PaintingWall.GetComponent<PaintingWall>().startPainting();
     }
 }
