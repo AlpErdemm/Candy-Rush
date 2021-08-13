@@ -38,25 +38,6 @@ public class Character_Controller : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (isPaintingStage)
-        {
-            if (!isDistanceCalculated)
-            {
-                direction = dest - mainCamera.transform.position;
-                direction = direction.normalized;                
-                isDistanceCalculated = true;
-            }
-            distance = dest - mainCamera.transform.position;
-            if (Mathf.Abs(distance.x) + Mathf.Abs(distance.y) + Mathf.Abs(distance.z) < 0.1f)
-            {
-                isPaintingStage = false;
-                StartCoroutine(RotateCamera());
-            }
-            else
-            {
-                mainCamera.transform.Translate(direction * 0.3f);
-            }
-        }
         if (isMoving)
         {
             transform.Translate(new Vector3(0, 0, runSpeed));
@@ -116,12 +97,27 @@ public class Character_Controller : MonoBehaviour
         mainCamera.transform.SetParent(null);
         mainCamera.transform.localRotation = new Quaternion(0, 0, 0, 0);
         isPaintingStage = true;
+        StartCoroutine(MoveCamera());
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().enablePainting();
     }
-    IEnumerator RotateCamera()
+
+    IEnumerator MoveCamera()
     {
+        float step = 0f;
+        distance = dest - mainCamera.transform.position;
+        direction = distance.normalized;
+        float distanceScalar = Mathf.Sqrt(Mathf.Pow(distance.x, 2) + Mathf.Pow(distance.y, 2) + Mathf.Pow(distance.z, 2));
+        Debug.Log(direction);
+
+        while (step < distanceScalar)
+        {
+            mainCamera.transform.Translate(direction);
+            step++;
+            yield return new WaitForSeconds(0.01f);
+        }
+
         int angle = 0;
-        while(angle < 90)
+        while (angle < 90)
         {
             mainCamera.transform.Rotate(new Vector3(0, 1f, 0));
             angle++;

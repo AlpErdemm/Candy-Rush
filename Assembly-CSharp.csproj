@@ -63,11 +63,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\PaintingWall.cs" />
+    <Compile Include="Assets\Radar.cs" />
     <Compile Include="Assets\Scripts\Character_Controller.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\HalfDonut.cs" />
     <Compile Include="Assets\Scripts\MovingObstacle.cs" />
+    <Compile Include="Assets\Scripts\OpponentController.cs" />
+    <Compile Include="Assets\Scripts\PaintingWall.cs" />
     <Compile Include="Assets\Scripts\RotatingPlatform.cs" />
     <Compile Include="Assets\Scripts\Rotator.cs" />
     <Compile Include="Assets\Scripts\SideMovementButton.cs" />

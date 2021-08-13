@@ -18,7 +18,17 @@ public class GameController : MonoBehaviour
 
     public void startGame()
     {
-        Character.GetComponent<Character_Controller>().startRunning();
+        GameObject[] gos = GameObject.FindGameObjectsWithTag("Character");
+
+        foreach (GameObject go in gos)
+        {
+            if(go.GetComponent<Character_Controller>() != null)
+            {
+                go.GetComponent<Character_Controller>().startRunning();
+            }
+            else if (go.GetComponent<OpponentController>() != null)
+                go.GetComponent<OpponentController>().startRunning();
+        }
         
         foreach(GameObject go in StartElements)
         {
