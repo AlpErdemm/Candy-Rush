@@ -16,7 +16,6 @@ public class RotatingPlatform : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        Debug.Log("Pushing");
         collision.gameObject.transform.Translate(new Vector3(pushForce, 0, 0));
     }
 
