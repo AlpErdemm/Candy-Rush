@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class Character_Controller : MonoBehaviour
 {
-    private bool isGameStarted = false;
     private bool isMoving;
     private float runSpeed = 0.1f;
     private float sideSpeed = 0.01f;
     void Start()
     {
-        isMoving = true;
+        isMoving = false;
     }
 
     // Update is called once per frame
@@ -21,24 +20,20 @@ public class Character_Controller : MonoBehaviour
             transform.Translate(new Vector3(0, 0, runSpeed));
         }
     }
-
-    public bool getGameStarted()
-    {
-        return isGameStarted;
-    }
-    public void setGameStarted(bool _isGameStarted)
-    {
-        isGameStarted = _isGameStarted;
-    }
-
     public void moveLeft()
     {
-        transform.Translate(new Vector3(-sideSpeed, 0, 0));
+        if (isMoving)
+        {
+            transform.Translate(new Vector3(-sideSpeed, 0, 0));
+        }
     }
 
     public void moveRight()
     {
-        transform.Translate(new Vector3(sideSpeed, 0, 0));
+        if (isMoving)
+        {
+            transform.Translate(new Vector3(sideSpeed, 0, 0));
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -48,5 +43,17 @@ public class Character_Controller : MonoBehaviour
             isMoving = false;
             GetComponent<Animator>().SetBool("Crash", true);
         }
+
+        if (collision.gameObject.CompareTag("Finish"))
+        {
+            isMoving = false;
+            GetComponent<Animator>().SetBool("Victory", true);
+        }
+    }
+
+    public void startRunning()
+    {
+        isMoving = true;
+        GetComponent<Animator>().SetBool("Running", true);
     }
 }

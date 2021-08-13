@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Character_Controller.cs" />
+    <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\HalfDonut.cs" />
     <Compile Include="Assets\Scripts\MovingObstacle.cs" />
     <Compile Include="Assets\Scripts\RotatingPlatform.cs" />
