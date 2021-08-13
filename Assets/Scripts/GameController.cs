@@ -29,4 +29,9 @@ public class GameController : MonoBehaviour
 
 
     }
+
+    public void setGameOver()
+    {
+        Debug.Log("Game Over Bitch!");
+    }
 }
