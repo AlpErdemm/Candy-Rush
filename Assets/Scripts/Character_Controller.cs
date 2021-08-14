@@ -13,7 +13,7 @@ public class Character_Controller : MonoBehaviour
     private bool isMoving;
     private float runSpeed = 0.1f;
     private float sideSpeed = 0.01f;
-    private float fallLimit = 0.01f;
+    private float fallLimit = -0.5f;
     private bool isGameOver = false;
 
     Vector3 dest = new Vector3(17.450f, 2f, 247.43f);
@@ -107,7 +107,6 @@ public class Character_Controller : MonoBehaviour
         distance = dest - mainCamera.transform.position;
         direction = distance.normalized;
         float distanceScalar = Mathf.Sqrt(Mathf.Pow(distance.x, 2) + Mathf.Pow(distance.y, 2) + Mathf.Pow(distance.z, 2));
-        Debug.Log(direction);
 
         while (step < distanceScalar)
         {

@@ -13,7 +13,7 @@ public class MovingObstacle : MonoBehaviour
     [SerializeField]
     private float speed;
 
-    private bool isGoingLeft = false;
+    public bool isGoingLeft = false;
 
     private void Update()
     {
