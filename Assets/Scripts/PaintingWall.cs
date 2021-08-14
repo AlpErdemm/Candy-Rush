@@ -26,6 +26,7 @@ public class PaintingWall : MonoBehaviour
     
     private void Update()
     {
+        // Activate red blocks upon ray hit
         if (Input.GetMouseButton(0) && isStarted)
         {
             var Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -39,6 +40,7 @@ public class PaintingWall : MonoBehaviour
         }
     }
 
+    // Check fill percentage and update text
     private void CheckPercentage()
     {
         int percentage = Mathf.RoundToInt(calculatePercentage());
@@ -61,6 +63,7 @@ public class PaintingWall : MonoBehaviour
         return count * 100f / fractions.Count;
     }
 
+    // Painting done, reload the scene
     IEnumerator GameEnd()
     {
         congrats.SetActive(true);

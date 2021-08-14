@@ -21,11 +21,12 @@ public class SideMovementButton : MonoBehaviour, IPointerDownHandler, IPointerUp
         mouseDown = false;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         checkTouch();
     }
 
+    // Check touches/pointer and move character accordingly
     private void checkTouch()
     {
         if (mouseDown)

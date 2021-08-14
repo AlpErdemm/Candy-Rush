@@ -7,8 +7,7 @@ public class GameController : MonoBehaviour
     [SerializeField]
     private GameObject Character;
 
-    [SerializeField]
-    private GameObject RankingText;
+    public GameObject RankingText;
 
     [SerializeField]
     private GameObject PaintingWall;
@@ -18,11 +17,9 @@ public class GameController : MonoBehaviour
 
     [SerializeField]
     private List<GameObject> TouchAreas;
-
-    public bool opponentWon = false;
-
     public void startGame()
     {
+        // Find characters and start running
         GameObject[] gos = GameObject.FindGameObjectsWithTag("Character");
 
         foreach (GameObject go in gos)
@@ -35,6 +32,7 @@ public class GameController : MonoBehaviour
                 go.GetComponent<OpponentController>().startRunning();
         }
         
+        // Update UI
         foreach(GameObject go in StartElements)
         {
             go.SetActive(false);
@@ -51,8 +49,7 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        if(!opponentWon)
-            checkRanking();
+        checkRanking();
     }
 
     public void enablePainting()
@@ -66,6 +63,7 @@ public class GameController : MonoBehaviour
         PaintingWall.GetComponent<PaintingWall>().startPainting();
     }
 
+    // Calculate and update rank text 
     private void checkRanking()
     {
         GameObject[] Characters = GameObject.FindGameObjectsWithTag("Character");

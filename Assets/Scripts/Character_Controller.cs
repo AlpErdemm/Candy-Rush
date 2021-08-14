@@ -12,30 +12,32 @@ public class Character_Controller : MonoBehaviour
     private bool isDistanceCalculated = false;
     private bool isMoving;
     private float runSpeed = 0.1f;
-    private float sideSpeed = 0.01f;
+    private float sideSpeed = 0.05f;
     private float fallLimit = -1f;
     private bool isGameOver = false;
 
     Vector3 dest = new Vector3(17.450f, 2f, 247.43f);
     Vector3 direction = new Vector3();
     Vector3 distance = new Vector3();
+    private Vector3 startPosition;
 
     void Start()
     {
+        startPosition = transform.position;
         isMoving = false;
     }
 
+    // If position-y is too low, drop the character
     private void Update()
     {
         if(transform.position.y <= fallLimit && !isGameOver)
         {
-            Debug.LogError(transform.position.y);
             GetComponent<Animator>().SetBool("Fall", true);
-            StartCoroutine(gameOver());
+            StartCoroutine(restart());
         }
     }
 
-    // Update is called once per frame
+    // Move forward
     void FixedUpdate()
     {
         if (isMoving)
@@ -43,6 +45,7 @@ public class Character_Controller : MonoBehaviour
             transform.Translate(new Vector3(0, 0, runSpeed));
         }
     }
+
     public void moveLeft()
     {
         if (isMoving)
@@ -61,14 +64,17 @@ public class Character_Controller : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        // Obstacle hit, start again
         if (collision.gameObject.CompareTag("Obstacle") && !isGameOver)
         {
             GetComponent<Animator>().SetBool("Crash", true);
-            StartCoroutine(gameOver());
+            StartCoroutine(restart());
         }
 
+        // Passed the finish line, start painting
         if (collision.gameObject.CompareTag("Finish"))
         {
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().RankingText.SetActive(false);
             GetComponent<Animator>().SetBool("Victory", true);
             StartCoroutine(victory());
         }
@@ -80,12 +86,21 @@ public class Character_Controller : MonoBehaviour
         GetComponent<Animator>().SetBool("Running", true);
     }
 
-    IEnumerator gameOver()
+    // Restart character
+    IEnumerator restart()
     {
-        isGameOver = true;
         isMoving = false;
+        isGameOver = true;
         yield return new WaitForSeconds(2);
-        SceneManager.LoadScene(0);
+        GetComponent<Animator>().SetBool("Crash", false);
+        GetComponent<Animator>().SetBool("Running", true);
+        GetComponent<Animator>().SetBool("Fall", false);
+        GetComponent<Animator>().SetBool("Restart", true);
+        isMoving = true;
+        transform.position = startPosition;
+        isGameOver = false;
+        yield return new WaitForSeconds(2);
+        GetComponent<Animator>().SetBool("Restart", false);
     }
 
     IEnumerator victory()
@@ -101,6 +116,7 @@ public class Character_Controller : MonoBehaviour
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().enablePainting();
     }
 
+    // Move camera towards painting wall
     IEnumerator MoveCamera()
     {
         float step = 0f;

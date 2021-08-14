@@ -12,7 +12,8 @@ public class RotatingPlatform : MonoBehaviour
     {
         transform.Rotate(new Vector3(0, 0, spinSpeed));
     }
-
+    
+    // Push characters to the side upon collision
     private void OnCollisionStay(Collision collision)
     {
         collision.gameObject.transform.Translate(new Vector3(pushForce, 0, 0));

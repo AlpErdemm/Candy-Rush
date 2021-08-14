@@ -5,29 +5,33 @@ using UnityEngine;
 public class OpponentController : MonoBehaviour
 {
 
-    private float fallLimit = -0.5f;
+    private float fallLimit = -1.5f;
     private bool isMoving = false;
     private float runSpeed = 0.1f;
     private float sideSpeed;
+    private bool isGameOver = false;
 
     private float destinationX;
+    private Vector3 startPosition;
 
-
+    public bool isFinished = false;
     private void Start()
     {
+        startPosition = transform.position;
         sideSpeed = 0f;
         destinationX = 0.0f;
     }
 
-
-    /*private void Update()
+    // If position-y is too low, drop the character
+    private void Update()
     {
-        if (transform.position.y <= fallLimit)
+        if (transform.position.y <= fallLimit && !isGameOver)
         {
             GetComponent<Animator>().SetBool("Fall", true);
+            StartCoroutine(restart());
         }
     }
-    */
+    
     void FixedUpdate()
     {
         if (isMoving)
@@ -40,17 +44,6 @@ public class OpponentController : MonoBehaviour
                 sideSpeed = 0f;
             transform.Translate(new Vector3(sideSpeed , 0, runSpeed));
         }
-
-        /*if (Random.value > 0.5f && transform.position.x >= -9.8f)
-        {
-            Debug.Log("Move Left");
-            moveLeft();
-        }
-        else if (transform.position.x <= 9.8f)
-        {
-            Debug.Log("Move Right");
-            moveRight();
-        }*/
     }
     public void moveLeft()
     {
@@ -74,6 +67,7 @@ public class OpponentController : MonoBehaviour
         GetComponent<Animator>().SetBool("Running", true);
     }
 
+    // Moving Obstacle detected ahead
     public void enterMovingObstacle(GameObject obstacle)
     {
         if (obstacle.transform.localPosition.x < -15f)
@@ -100,6 +94,7 @@ public class OpponentController : MonoBehaviour
         }
     }
 
+    // Static Obstacle detected ahead
     public void enterStaticObstacle(GameObject obstacle)
     {
         if(obstacle.transform.position.x < 0)
@@ -111,6 +106,8 @@ public class OpponentController : MonoBehaviour
             destinationX = Random.Range(-10f, -3f);
         }       
     }
+
+    // Rotating Platform Detected ahead
     public void enterRotatingPlatform(GameObject obstacle)
     {
         if(obstacle.GetComponent<RotatingPlatform>().spinSpeed > 0)
@@ -135,16 +132,36 @@ public class OpponentController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        // Obstacle hit, start again
         if (collision.gameObject.CompareTag("Obstacle"))
         {
             GetComponent<Animator>().SetBool("Crash", true);
             isMoving = false;
+            StartCoroutine(restart());
         }
+
+        // Finish line passed
         if (collision.gameObject.CompareTag("Finish"))
         {
             isMoving = false;
             GetComponent<Animator>().SetBool("Victory", true);
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().opponentWon = true;
+            isFinished = true;
         }
+    }
+
+    IEnumerator restart()
+    {
+        isMoving = false;
+        isGameOver = true;
+        yield return new WaitForSeconds(2);
+        GetComponent<Animator>().SetBool("Crash", false);
+        GetComponent<Animator>().SetBool("Running", true);
+        GetComponent<Animator>().SetBool("Fall", false);
+        GetComponent<Animator>().SetBool("Restart", true);
+        isMoving = true;
+        transform.position = startPosition;
+        isGameOver = false;
+        yield return new WaitForSeconds(2);
+        GetComponent<Animator>().SetBool("Restart", false);
     }
 }
