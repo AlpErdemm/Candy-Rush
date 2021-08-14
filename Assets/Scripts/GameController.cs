@@ -8,6 +8,9 @@ public class GameController : MonoBehaviour
     private GameObject Character;
 
     [SerializeField]
+    private GameObject RankingText;
+
+    [SerializeField]
     private GameObject PaintingWall;
 
     [SerializeField]
@@ -15,6 +18,8 @@ public class GameController : MonoBehaviour
 
     [SerializeField]
     private List<GameObject> TouchAreas;
+
+    public bool opponentWon = false;
 
     public void startGame()
     {
@@ -39,12 +44,50 @@ public class GameController : MonoBehaviour
         {
             go.SetActive(true);
         }
+        RankingText.SetActive(true);
 
 
     }
 
+    private void Update()
+    {
+        if(!opponentWon)
+            checkRanking();
+    }
+
     public void enablePainting()
     {
+        GameObject[] Characters = GameObject.FindGameObjectsWithTag("Character");
+        foreach (GameObject go in Characters)
+        {
+            if (go.GetComponent<Character_Controller>() == null)
+                go.SetActive(false);
+        }
         PaintingWall.GetComponent<PaintingWall>().startPainting();
+    }
+
+    private void checkRanking()
+    {
+        GameObject[] Characters = GameObject.FindGameObjectsWithTag("Character");
+
+        float playerLocation = Character.transform.position.z;
+        int count = 1;
+
+        foreach(GameObject go in Characters)
+        {
+            if (go.GetComponent<Character_Controller>() == null && go.transform.position.y > -4f && go.transform.position.z > playerLocation)
+            {
+                    count++;
+            }
+        }
+
+        if (count == 1)
+            RankingText.GetComponent<TMPro.TextMeshProUGUI>().text = "1st";
+        else if (count == 2)
+            RankingText.GetComponent<TMPro.TextMeshProUGUI>().text = "2nd";
+        else if (count == 3)
+            RankingText.GetComponent<TMPro.TextMeshProUGUI>().text = "3rd";
+        else
+            RankingText.GetComponent<TMPro.TextMeshProUGUI>().text = count + "th";
     }
 }

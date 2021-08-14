@@ -13,7 +13,7 @@ public class Character_Controller : MonoBehaviour
     private bool isMoving;
     private float runSpeed = 0.1f;
     private float sideSpeed = 0.01f;
-    private float fallLimit = -0.5f;
+    private float fallLimit = -1f;
     private bool isGameOver = false;
 
     Vector3 dest = new Vector3(17.450f, 2f, 247.43f);

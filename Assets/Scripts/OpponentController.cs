@@ -140,5 +140,11 @@ public class OpponentController : MonoBehaviour
             GetComponent<Animator>().SetBool("Crash", true);
             isMoving = false;
         }
+        if (collision.gameObject.CompareTag("Finish"))
+        {
+            isMoving = false;
+            GetComponent<Animator>().SetBool("Victory", true);
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().opponentWon = true;
+        }
     }
 }
